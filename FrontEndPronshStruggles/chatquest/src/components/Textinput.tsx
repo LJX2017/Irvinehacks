@@ -8,11 +8,7 @@ type Message = {
     fromUser: boolean;
 };
 
-type TextInputProps = {
-    onInputChange: (text: string) => void;
-};
-
-const TextInput: React.FC<TextInputProps> = ({ onInputChange }) => {
+const TextInput = () => {
     const [inputText, setInputText] = useState("");
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
