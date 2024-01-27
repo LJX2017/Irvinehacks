@@ -2,11 +2,14 @@ import requests
 
 CHUNK_SIZE = 1024
 url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
+# the 21m00Tcm4TlvDq8ikWAM is the person of the model
+# it has labels like american and stuff like that if we want to pick from different moods of people or different accents
 
 headers = {
   "Accept": "audio/mpeg",
   "Content-Type": "application/json",
-  "xi-api-key": "efb24202568e68f18c8a883b4bac6c40"
+  "xi-api-key": ""
+#   this is my api key for now please dont 
 }
 
 data = {
