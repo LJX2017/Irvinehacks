@@ -4,11 +4,13 @@ import Image from '@/components/Image';
 import TextInput from '@/components/Textinput';
 import VoiceInput from '@/components/VoiceInput';
 import TextComponent from '@/components/characters';
+import Description from '@/components/Desription';
 
 const HomePage: React.FC = () => {
   return (
     <div>
       <Header />
+      <Description />
       {/* Add your home page content here */}
       <Image link="https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/d69487cd-1f53-4825-b091-6e96caf1c199-0.png" alt="ChatQuest" />
       <TextComponent text="Hello" />
@@ -17,5 +19,6 @@ const HomePage: React.FC = () => {
     </div>
   );
 };
+
 
 export default HomePage;
