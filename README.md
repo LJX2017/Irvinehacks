@@ -14,6 +14,7 @@ Front-end:
  - [ ] Display character movement calculated by back-end (optional)
  - [ ] Play audio from back-end
  - [ ] Deploy via Versel (optional)
+ - [ ] Captions
 
 Back-end:
  - [ ] Collect text input from front-end to train/customize a chatbot
