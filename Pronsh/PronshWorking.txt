@@ -1,0 +1,2 @@
+###..(3/5) Was working on the NLP (Voice to Text)
+#....(1/5) Currently working on PLN (Text to voice lmao)
