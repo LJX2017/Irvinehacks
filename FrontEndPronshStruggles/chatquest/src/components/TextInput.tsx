@@ -1,5 +1,6 @@
 // TextInput.tsx
 import React, { useState } from "react";
+import { Button } from "@nextui-org/react";
 
 type Message = {
   type: string;
@@ -43,14 +44,20 @@ const TextInput: React.FC<TextInputProps> = ({ onMessageReceived }) => {
   };
 
   return (
-    <div>
+    <div className='px-4 my-3 flex justify-center items-center'>
       <input
         type="text"
         value={inputText}
         onChange={handleInputChange}
         placeholder="Enter text..."
+        className='bg-black rounded p-3 mx-3' style={{ borderColor: 'red', borderWidth: '1px', borderStyle: 'solid' }}
       />
-      <button onClick={handleSubmit}>Submit</button>
+      <br />
+      <br />
+      <Button color="primary" variant="flat" type='submit' className="disable-animation p-3 m-2 rounded" style={{ borderColor: 'blue', borderWidth: '1px', borderStyle: 'solid' }}
+        onClick={handleSubmit}>
+        Submit
+      </Button>
     </div>
   );
 };

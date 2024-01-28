@@ -11,8 +11,7 @@ import whisper
 # this is the open-ai whisper model
 # pip install openai-whisper 
 # sudo apt-get install ffmpeg
-
-
+# pip install fastapi
 
 class Item(BaseModel):
     description: str

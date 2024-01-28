@@ -17,19 +17,17 @@
 }
 
 body {
-  display: flex;
-  justify-content: center;
+    display: block;
+    justify-content: center;
+    align-items: center;
   align-items: center;
-}
+  background-color: #000000;
+    color: #fff;
+    font: italic small-caps bold 16px/2 cursive;
+  }
 
 .container {
   padding: 20px;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-    color: black;
-  }
-}
 

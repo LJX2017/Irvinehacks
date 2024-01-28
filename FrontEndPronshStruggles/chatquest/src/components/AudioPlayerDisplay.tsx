@@ -7,7 +7,7 @@ interface AudioPlayerDisplayProps {
 
 const AudioPlayerDisplay: React.FC<AudioPlayerDisplayProps> = ({ audioURL, isLoading }) => {
   return (
-    <div>
+    <div className='px-4 my-3 flex justify-center items-center'>
       {isLoading ? (
         <div>Loading...</div>
       ) : (

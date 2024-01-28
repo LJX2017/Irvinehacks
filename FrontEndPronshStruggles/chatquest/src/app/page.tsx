@@ -18,14 +18,14 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='items-center p-5 mx-80%'>
       <Header />
       <Description />
       <Image link="https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/d69487cd-1f53-4825-b091-6e96caf1c199-0.png" alt="ChatQuest" />
       <TextInput onMessageReceived={handleTextInputMessage} />
       {apiText && (
         <div>
-          <TextComponent text={apiText} />
+          <TextComponent text={apiText}/>
           <AudioPlayer message={apiText || ""} />
         </div>
       )}

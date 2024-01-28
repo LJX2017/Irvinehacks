@@ -7,7 +7,7 @@ interface ImageProps {
 
 const Image: React.FC<ImageProps> = ({ link, alt }) => {
     return (
-        <div>
+        <div className='px-4 my-3 flex justify-center items-center'>
             <img src={link} alt={alt} />
         </div>
     );

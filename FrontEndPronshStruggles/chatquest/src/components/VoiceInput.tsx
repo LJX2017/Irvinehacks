@@ -70,7 +70,7 @@ const AudioRecorder: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='px-4 my-3 flex justify-center items-center'>
       <h1>Audio Recorder</h1>
       {isRecording && <p>Recording...</p>}
       <div>
