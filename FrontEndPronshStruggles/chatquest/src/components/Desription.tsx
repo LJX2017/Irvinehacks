@@ -20,12 +20,13 @@ const Description: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ description }),
+                body: JSON.stringify({config:true, in_type:"str",  description }),
             });
 
             // Handle response
             const data = await response.json();
             console.log(data);
+            
         } catch (error) {
             // Handle error
             console.error('Failed to send description', error);

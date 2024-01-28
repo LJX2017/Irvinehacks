@@ -1,36 +1,59 @@
+// TextInput.tsx
 "use client";
-
 import React, { useState } from "react";
 
 type Message = {
-    type: string;
-    message: string;
-    fromUser: boolean;
+  type: string;
+  message: string;
+  fromUser: boolean;
 };
 
-const TextInput = () => {
-    const [inputText, setInputText] = useState("");
+interface TextInputProps {
+  onMessageReceived: (message: string) => void;
+}
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInputText(event.target.value);
+const TextInput: React.FC<TextInputProps> = ({ onMessageReceived }) => {
+  const [inputText, setInputText] = useState("");
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    const message: Message = {
+      type: "text",
+      message: inputText,
+      fromUser: true,
     };
 
-    const handleSubmit = () => {
-        // Handle submit logic here
-    };
+    try {
+      const response = await fetch("http://127.0.0.1:8000/sendMessage", {
+        method: "POST",
+        body: JSON.stringify(message),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    return (
-        <div>
-            <input
-                type="text"
-                value={inputText}
-                onChange={handleInputChange}
-                placeholder="Enter text..."
-            />
-            <button onClick={handleSubmit}>Submit</button>
-        </div>
-    );
+      const data = await response.json();
+      console.log(data.message);  // Log the response message from the server
+      onMessageReceived(data.message);  // Pass the message to the parent component
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={inputText}
+        onChange={handleInputChange}
+        placeholder="Enter text..."
+      />
+      <button onClick={handleSubmit}>Submit</button>
+    </div>
+  );
 };
-
 
 export default TextInput;
