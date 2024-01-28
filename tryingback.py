@@ -14,7 +14,7 @@ import whisper
 
 
 
-class Item(BaseModel):
+class Config(BaseModel):
     description: str
 
 class Message(BaseModel):
@@ -32,35 +32,21 @@ app.add_middleware(
 )
 character = None
 @app.post("/backend")
-async def receive_frontend(item: Item):
+async def receive_config(config_prompts: Config):
+    """Listens for POST request on http://127.0.0.1:8000/backend from front-end, then creates a character and returns a placeholder JSON"""
     global character
-    character = Character(item.description)
-    response = send_message(item.description)
+    character = Character(config_prompts.description)
     return {"message": response}
 
 @app.post("/sendMessage")
-async def receive_json_from_frontend(json_data: Message):
+async def receive_text_json(msg_prompt: Message):
+    """Listen for POST request on http://127.0.0.1:8000/sendMessage from front-end containing string prompt, then responds with a JSON containing the response message"""
     global character
-    return generate_json_response(character.chat(json_data.message))
-    # response = generate_json_response(json_data)
-    # returnn response
-
-def send_message(message: str) -> str:
-    # Generate a random response
-    responses = ["Hello!", "How are you?", "Nice to meet you!"]
-    random_response = random.choice(responses)
-    return random_response
-
-def generate_json_response(json_data: str) -> dict:
-    # Process the JSON data received from the front end
-    # and generate a response JSON
-    response = {
-        "message": f"{json_data}"
-    }
-    return response
+    return {"message": f"{character.chat(msg_prompt.message)}"}
     
 @app.post("/voice") 
-async def convert_audio_to_text(audio_blob: dict):
+async def receive_audio_json(audio_blob: dict):
+    """Listen for POST request on http://127.0.0.1:8000/voice from front-end containing audio prompt, then responds with a JSON containing the response message"""
     # return {"text": "Yo, I'm Peter Quill, also known as Star-Lord. I'm a legendary outlaw who travels the galaxy in search of adventure and fortune. I'm known for my reckless and irresponsible behavior, but I'm also loyal to my friends and always up for a good time."}
     try:
         # Extract the audio content (adjust the key according to your JSON structure)
