@@ -7,13 +7,14 @@ from fastapi import HTTPException, Form
 import io
 import json
 import whisper
+import character as charac
 # this is the open-ai whisper model
 # pip install openai-whisper 
 # sudo apt-get install ffmpeg
 
 
 
-class Item(BaseModel):
+class Config(BaseModel):
     description: str
 
 class Message(BaseModel):
@@ -29,31 +30,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/backend")
-async def receive_frontend(item: Item):
-    response = send_message(item.description)
-    return {"message": response}
+current_character = None
+@app.post("/config/")
+async def receive_config_frontend(config_prompt: Config):
+    """Listens on http://127.0.0.1:8000/config/ for a POST request from front-end, then sets up the character and returns a placeholder json"""
+    global current_character
+    current_character = charac.Character(config_prompt)
+    return {"message": None}
 
-@app.post("/sendMessage")
-async def receive_json_from_frontend(json_data: Message):
-    response = generate_json_response(json_data)
-    return response
-
-def send_message(message: str) -> str:
-    # Generate a random response
-    responses = ["Hello!", "How are you?", "Nice to meet you!"]
-    random_response = random.choice(responses)
-    return random_response
-
-def generate_json_response(json_data: Message) -> dict:
-    # Process the JSON data received from the front end
-    # and generate a response JSON
-    response = {
-        "message": f"{json_data.message}"
-    }
+@app.post("/genMessage/")
+async def receive_message_from_frontend(message_prompt: Message):
+    """Listens on http://127.0.0.1:8000/genMessage/ for a POST request from front-end, then returns the character's response from back-end as a json"""
+    global current_character
+    response = {"message": f"{current_character.chat(message_prompt.message)}"}
     return response
     
-@app.post("/voice") 
+@app.post("/voice/") 
 async def convert_audio_to_text(audio_blob: dict):
     try:
         # Extract the audio content (adjust the key according to your JSON structure)
