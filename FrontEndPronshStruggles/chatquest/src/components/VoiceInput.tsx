@@ -45,21 +45,28 @@ const AudioRecorder: React.FC = () => {
   };
 
   const sendVoiceToAPI = (audioBlob: Blob) => {
-    const formData = new FormData();
-    formData.append('audio', audioBlob);
-
-    fetch('http://your-fastapi-endpoint', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the JSON response with text here
-        setTranscription(data.text);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const audioDataUrl = reader.result as string;
+      const audioJson = JSON.stringify({ audio: audioDataUrl });
+      console.log(audioJson + " " + typeof audioJson);
+      fetch('http://127.0.0.1:8000/voice', {
+        method: 'POST',
+        body: audioJson,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .catch((error) => {
-        console.error('Error sending voice to API:', error);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the JSON response with text here
+          setTranscription(data.text);
+        })
+        .catch((error) => {
+          console.error('Error sending voice to API:', error);
+        });
+    };
+    reader.readAsDataURL(audioBlob);
   };
 
   return (

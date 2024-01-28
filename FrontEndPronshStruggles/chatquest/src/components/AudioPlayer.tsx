@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig, ResponseType } from "axios";
 
 const textToSpeech = async (inputText: string) => {
   // Set the API key for ElevenLabs API. Use environment variables in production.
-  const API_KEY = "";
+  const API_KEY = "efb24202568e68f18c8a883b4bac6c40";
   // Set the ID of the voice to be used.
   const VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
 
