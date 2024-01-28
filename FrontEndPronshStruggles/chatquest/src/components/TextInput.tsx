@@ -1,5 +1,4 @@
 // TextInput.tsx
-"use client";
 import React, { useState } from "react";
 
 type Message = {

@@ -1,38 +1,30 @@
-// AudioPlayer.tsx
-"use client";
-import React, { useRef, useState } from 'react';
+import React from 'react';
+import 'dotenv/config';
 
-interface AudioPlayerProps {
-  audioUrl: string;
-}
-
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl }) => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handlePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-
-      setIsPlaying(!isPlaying);
-    }
+const textToSpeech = async (inputText: string) => {
+  const API_KEY = "efb24202568e68f18c8a883b4bac6c40";
+  const VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
+  console.log("inputText", inputText);
+  const options = {
+    method: "POST",
+    headers: {
+      accept: "audio/mpeg",
+      "content-type": "application/json",
+      "xi-api-key": `${API_KEY}`,
+    },
+    body: JSON.stringify({
+      text: inputText,
+    }),
   };
 
-  return (
-    <div>
-      <button onClick={handlePlayPause}>
-        {isPlaying ? 'Pause Audio' : 'Play Audio'}
-      </button>
-      <audio ref={audioRef} controls>
-        <source src={audioUrl} type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-    </div>
+  const response = await fetch(
+    `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
+    options
   );
+
+  const audioData = await response.arrayBuffer();
+  console.log("audioData", audioData);
+  return audioData;
 };
 
-export default AudioPlayer;
+export default textToSpeech;

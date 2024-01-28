@@ -8,9 +8,7 @@ class Item(BaseModel):
     description: str
 
 class Message(BaseModel):
-    type: str
     message: str
-    fromUser: bool
 
 app = FastAPI()
 
@@ -42,8 +40,6 @@ def generate_json_response(json_data: Message) -> dict:
     # Process the JSON data received from the front end
     # and generate a response JSON
     response = {
-        "status": "success",
-        "message": f"{json_data.message}",
-        "data": json_data.dict(),
+        "message": f"{json_data.message}"
     }
     return response
