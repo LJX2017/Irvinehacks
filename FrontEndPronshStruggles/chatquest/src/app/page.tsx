@@ -1,6 +1,5 @@
 // HomePage.tsx
 "use client";
-// HomePage.tsx
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Image from '@/components/Image';
@@ -15,6 +14,7 @@ const HomePage: React.FC = () => {
 
   const handleTextInputMessage = (message: string) => {
     setApiText(message);
+
   };
 
   return (
@@ -26,7 +26,7 @@ const HomePage: React.FC = () => {
       {apiText && (
         <div>
           <TextComponent text={apiText} />
-          <AudioPlayer message={apiText} />
+          <AudioPlayer message={apiText || ""} />
         </div>
       )}
       <VoiceInput />

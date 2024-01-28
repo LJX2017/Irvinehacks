@@ -1,52 +1,41 @@
-// AudioPlayer.tsx
-"use client";
 import React, { useState, useEffect } from "react";
-import textToSpeech from "./AudioPlayer"; // Assuming you have the textToSpeech function implemented
+import textToSpeech from "./AudioPlayer";
+import AudioPlayerDisplay from "./AudioPlayerDisplay"; // Assuming you have the textToSpeech function implemented
 
 interface AudioPlayerProps {
     message: string;
-}
-
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ message }) => {
+  }
+  
+  const AudioPlayer: React.FC<AudioPlayerProps> = ({ message }) => {
     const [audioURL, setAudioURL] = useState<string | null>(null);
-
-    const handleAudioFetch = async () => {
-        console.log("Fetching audio...");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+    useEffect(() => {
+      const handleAudioFetch = async () => {
         try {
-            if (audioURL) {
-                URL.revokeObjectURL(audioURL);
-            }
-            const data = await textToSpeech(message);
-            const blob = new Blob([data], { type: "audio/mpeg" });
-            const url = URL.createObjectURL(blob);
-            setAudioURL(url);
+          setIsLoading(true);
+  
+          // Revoke any previously existing audio URL
+          if (audioURL) {
+            URL.revokeObjectURL(audioURL);
+          }
+  
+          const data = await textToSpeech(message);
+          const blob = new Blob([data], { type: "audio/mpeg" });
+          const url = URL.createObjectURL(blob);
+          setAudioURL(url);
         } catch (error) {
-            console.error("Error fetching audio:", error);
-            setAudioURL(null);
+          console.error("Error fetching audio:", error);
+          setAudioURL(null);
+        } finally {
+          setIsLoading(false);
         }
-    };
-
-    useEffect(() => {
-        handleAudioFetch();
+      };
+  
+      handleAudioFetch();
     }, [message]);
-
-    useEffect(() => {
-        return () => {
-            if (audioURL) {
-                URL.revokeObjectURL(audioURL);
-            }
-        };
-    }, [audioURL]);
-
-    return (
-        <div>
-            {audioURL && (
-                <audio autoPlay controls>
-                    <source src={audioURL} type="audio/mpeg" />
-                </audio>
-            )}
-        </div>
-    );
-};
-
-export default AudioPlayer;
+  
+    return <AudioPlayerDisplay audioURL={audioURL} isLoading={isLoading} />;
+  };
+  
+  export default AudioPlayer;

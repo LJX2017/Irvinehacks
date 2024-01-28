@@ -5,6 +5,8 @@ import React, { useState, useRef } from 'react';
 const AudioRecorder: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [transcription, setTranscription] = useState<string>('');
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   const startRecording = () => {
@@ -24,6 +26,7 @@ const AudioRecorder: React.FC = () => {
         mediaRecorder.onstop = () => {
           const audioBlob = new Blob(chunks, { type: 'audio/wav' });
           setAudioBlob(audioBlob);
+          sendVoiceToAPI(audioBlob);
         };
 
         mediaRecorder.start();
@@ -41,6 +44,24 @@ const AudioRecorder: React.FC = () => {
     }
   };
 
+  const sendVoiceToAPI = (audioBlob: Blob) => {
+    const formData = new FormData();
+    formData.append('audio', audioBlob);
+
+    fetch('http://your-fastapi-endpoint', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the JSON response with text here
+        setTranscription(data.text);
+      })
+      .catch((error) => {
+        console.error('Error sending voice to API:', error);
+      });
+  };
+
   return (
     <div>
       <h1>Audio Recorder</h1>
@@ -55,6 +76,7 @@ const AudioRecorder: React.FC = () => {
           </div>
         )}
       </div>
+      <p>Transcription: {transcription}</p>
       <button onClick={startRecording} disabled={isRecording}>
         Start Recording
       </button>

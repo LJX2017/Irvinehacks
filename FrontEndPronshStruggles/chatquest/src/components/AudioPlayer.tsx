@@ -1,30 +1,37 @@
-import React from 'react';
-import 'dotenv/config';
+// textToSpeech.ts
+import axios, { AxiosRequestConfig, ResponseType } from "axios";
 
 const textToSpeech = async (inputText: string) => {
-  const API_KEY = "efb24202568e68f18c8a883b4bac6c40";
+  // Set the API key for ElevenLabs API. Use environment variables in production.
+  const API_KEY = "";
+  // Set the ID of the voice to be used.
   const VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
-  console.log("inputText", inputText);
-  const options = {
+
+  // Set options for the API request.
+  const options: AxiosRequestConfig = {
     method: "POST",
+    url: `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
     headers: {
       accept: "audio/mpeg",
       "content-type": "application/json",
-      "xi-api-key": `${API_KEY}`,
+      "xi-api-key": API_KEY,
     },
-    body: JSON.stringify({
+    data: {
       text: inputText,
-    }),
+    },
+    responseType: "arraybuffer" as ResponseType,
   };
 
-  const response = await fetch(
-    `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
-    options
-  );
-
-  const audioData = await response.arrayBuffer();
-  console.log("audioData", audioData);
-  return audioData;
+  try {
+    // Use axios to make the API request
+    const response = await axios.request<ResponseType>(options);
+    
+    // Return the binary audio data
+    return response.data;
+  } catch (error) {
+    console.error("Error making text-to-speech request:", error);
+    throw error;
+  }
 };
 
 export default textToSpeech;
