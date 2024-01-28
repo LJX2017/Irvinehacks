@@ -5,6 +5,7 @@ import llama_hub
 from llama_index import download_loader
 import json
 from llama_index import ServiceContext
+from pathlib import Path
 from llama_index import (
     SimpleDirectoryReader,
     VectorStoreIndex,
@@ -52,7 +53,7 @@ class Character:
         self.agent = self.create_agent(user_prompt)
 
     def chat(self, user_prompt):
-        return self.agent.chat(user_prompt)
+        return str(self.agent.chat(user_prompt))
 
     def generate_description_from_user(self, user_prompt):
         # self.information = llama_index.get_character_info(user)
@@ -71,7 +72,15 @@ class Character:
                            f"figure out who the character is."
                            f"Only provide one answer. The name of the character in the prompt is:")
         self.name = self.llm.complete(name_prompt).text
-        print("check name", self.name)
+        if Path(f'Characters/{self.name}.json').exists():
+            with open(f'Characters/{self.name}.json', 'r') as f:
+                data = json.load(f)
+                self.personality = data["personality"]
+                self.personal_background = data["personal_background"]
+                self.language_style = data["language_style"]
+                self.original_character = False
+                return
+        # print("check name", self.name)
         if is_original_character:
             personality_prompt = (f"Based on the user's prompt: {user_prompt},"
                                   f" describe personality traits that fit the provided information."

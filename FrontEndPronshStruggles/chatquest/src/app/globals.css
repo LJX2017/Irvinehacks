@@ -17,7 +17,6 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +29,7 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-    color: white;
+    color: black;
   }
 }
 
