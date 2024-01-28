@@ -33,6 +33,8 @@
     }
   }
 
+  
+
   body {
     background: radial-gradient(
       rgba(var(--background-start-rgb), 1),
@@ -45,8 +47,10 @@
     background-color: #000000;
     color: #fff;
     font: italic small-caps bold 16px/2 cursive;
+    cursor: url("../../public/pen.png"),default;
   }
 
+  
   .container {
     padding: 20px;
   }
