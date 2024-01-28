@@ -1,6 +1,7 @@
 // pages/index.tsx
 "use client";
 import React, { useState, useRef } from 'react';
+import { Button } from '@nextui-org/react';
 
 const AudioRecorder: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -61,6 +62,7 @@ const AudioRecorder: React.FC = () => {
         .then((data) => {
           // Handle the JSON response with text here
           setTranscription(data.text);
+
         })
         .catch((error) => {
           console.error('Error sending voice to API:', error);
@@ -70,28 +72,48 @@ const AudioRecorder: React.FC = () => {
   };
 
   return (
-    <div className='px-4 my-3 flex justify-center items-center'>
-      <h1>Audio Recorder</h1>
-      {isRecording && <p>Recording...</p>}
-      <div>
-        {audioBlob && (
-          <div>
-            <audio controls>
-              <source src={URL.createObjectURL(audioBlob)} type="audio/wav" />
-              Your browser does not support the audio element.
-            </audio>
-          </div>
-        )}
+<div className='px-4 my-3 text-center'>
+  <div>
+    <h1>Audio Recorder</h1>
+  </div>
+  {isRecording && <p>Recording...</p>}
+  <div>
+    {audioBlob && (
+      <div className='flex justify-center items-center m-2'>
+        <audio controls>
+          <source src={URL.createObjectURL(audioBlob)} type="audio/wav" />
+          Your browser does not support the audio element.
+        </audio>
       </div>
-      <p>Transcription: {transcription}</p>
-      <button onClick={startRecording} disabled={isRecording}>
-        Start Recording
-      </button>
-      <button onClick={stopRecording} disabled={!isRecording}>
-        Stop Recording
-      </button>
-    </div>
+    )}
+  </div>
+  <p>Transcription: {transcription}</p>
+  <br />
+  <Button
+    color="primary"
+    onClick={startRecording}
+    disabled={isRecording}
+    variant="flat"
+    type='submit'
+    className="disable-animation p-3 m-2 rounded"
+    style={{ borderColor: 'blue', borderWidth: '1px', borderStyle: 'solid' }}
+  >
+    Start Recording
+  </Button>
+  <Button
+    color="primary"
+    onClick={stopRecording}
+    disabled={!isRecording}
+    variant="flat"
+    type='submit'
+    className="disable-animation p-3 m-2 rounded"
+    style={{ borderColor: 'blue', borderWidth: '1px', borderStyle: 'solid' }}
+  >
+    Stop Recording
+  </Button>
+</div>
+
   );
-};
+}
 
 export default AudioRecorder;

@@ -11,23 +11,43 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 214, 219, 220;
-    --background-end-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 5, 45;
+    --background-end-rgb: 0, 0, 0;
   }
-}
+    
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    25% {
+      background-position: 100% 0%;
+    }
+    50% {
+      background-position: 50% 100%;
+    }
+    75% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
 
-body {
+  body {
+    background: radial-gradient(
+      rgba(var(--background-start-rgb), 1),
+      rgba(var(--background-end-rgb), 1)
+    );
+    animation: gradient 10s ease infinite alternate-reverse;
     display: block;
     justify-content: center;
     align-items: center;
-  align-items: center;
-  background-color: #000000;
+    background-color: #000000;
     color: #fff;
     font: italic small-caps bold 16px/2 cursive;
   }
 
-.container {
-  padding: 20px;
+  .container {
+    padding: 20px;
+  }
 }
-
-
