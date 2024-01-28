@@ -71,6 +71,7 @@ class Character:
                            f"figure out who the character is."
                            f"Only provide one answer. The name of the character in the prompt is:")
         self.name = self.llm.complete(name_prompt).text
+        print("check name", self.name)
         if is_original_character:
             personality_prompt = (f"Based on the user's prompt: {user_prompt},"
                                   f" describe personality traits that fit the provided information."

@@ -1,4 +1,9 @@
 import character
+c = character.Character(input("Enter a prompt: "))
+q = input("Enter your words: ")
+while q != "quit":
+    print(character.chat(q))
+    q = input("Enter your words: ")
 from pathlib import Path
 # from llama_index import download_loader
 # from llama_index import ServiceContext
@@ -14,9 +19,9 @@ from pathlib import Path
 # from llama_index.tools import QueryEngineTool, ToolMetadata
 # from llama_index.agent import ReActAgent
 
-JSONReader = download_loader("JSONReader")
-
-loader = JSONReader()
+# JSONReader = download_loader("JSONReader")
+#
+# loader = JSONReader()
 
 
 # documents = loader.load_data(Path('./data.json'))
