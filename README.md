@@ -6,15 +6,14 @@ Generate, talk, and interact with your own character, powered through AI!
 ### Todo List:
 
 Front-end:
- - [ ] Text input field that sends text input to back-end
- - [ ] Background image generated using AI (optional)
- - [ ] "Next" button to switch input from being used to generate AI characteristics to talking with AI
- - [ ] Microphone/Camera button (asks for permissions)
+ - [X] Text input field that sends text input to back-end
  - [ ] Character
- - [ ] Display character movement calculated by back-end (optional)
  - [ ] Play audio from back-end
- - [ ] Deploy via Versel (optional)
  - [ ] Captions
+ - [ ] Microphone/Camera button (asks for permissions)
+ - [ ] Background image generated using AI (optional)
+ - [ ] Deploy via Versel (optional)
+ - [ ] Display character movement calculated by back-end (optional)
 
 Back-end:
  - [ ] Collect text input from front-end to train/customize a chatbot
