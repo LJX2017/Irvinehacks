@@ -12,6 +12,7 @@ from llama_index import (
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from llama_index.tools import QueryEngineTool, ToolMetadata
 from llama_index.agent import ReActAgent
+
 from llama_hub.tools.wikipedia import WikipediaToolSpec
 load_dotenv()
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")

@@ -36,6 +36,7 @@ async def receive_config(config_prompts: Config):
     character = Character(config_prompts.description)
     return {"message": "response"}
 
+
 @app.post("/sendMessage")
 async def receive_text_json(msg_prompt: Message):
     """Listen for POST request on http://127.0.0.1:8000/sendMessage from front-end containing string prompt, then responds with a JSON containing the response message"""
