@@ -8,13 +8,19 @@ import VoiceInput from '@/components/VoiceInput';
 import TextComponent from '@/components/characters';
 import Description from '@/components/Description';
 import AudioPlayer from '@/components/Player';
+import WorkingVideo from '@/components/workingVideo';
+import { Button } from '@nextui-org/react';
 
 const HomePage: React.FC = () => {
   const [apiText, setApiText] = useState<string | null>(null);
+  const [showWorkingVideo, setShowWorkingVideo] = useState(false);
 
   const handleTextInputMessage = (message: string) => {
     setApiText(message);
+  };
 
+  const handleButtonClick = () => {
+    setShowWorkingVideo(true);
   };
 
   return (
@@ -30,6 +36,10 @@ const HomePage: React.FC = () => {
         </div>
       )}
       <VoiceInput />
+      <div className='flex justify-center'>
+      <Button color="primary" variant="flat" type='submit' className="disable-animation p-3 m-2 rounded" style={{ borderColor: 'blue', borderWidth: '1px', borderStyle: 'solid' }} onClick={handleButtonClick}>Active Video</Button>
+      {showWorkingVideo && <WorkingVideo />}
+      </div>
     </div>
   );
 };
