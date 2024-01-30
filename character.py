@@ -1,9 +1,5 @@
-import llama_index
 from llama_index.llms import Gemini
 from dotenv import load_dotenv
-from llama_index.vector_stores import ChromaVectorStore
-from llama_index.storage.storage_context import StorageContext
-import llama_hub
 from llama_index import download_loader
 import json
 from llama_index import ServiceContext
@@ -11,13 +7,12 @@ from pathlib import Path
 from llama_index import (
     SimpleDirectoryReader,
     VectorStoreIndex,
-    StorageContext,
-    load_index_from_storage,
 )
+# pip install langchain
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from llama_index.tools import QueryEngineTool, ToolMetadata
 from llama_index.agent import ReActAgent
-from llama_index.tools.tool_spec.load_and_search.base import LoadAndSearchToolSpec
+
 from llama_hub.tools.wikipedia import WikipediaToolSpec
 load_dotenv()
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
@@ -139,7 +134,9 @@ class Character:
         documents = SimpleDirectoryReader(
             input_files=[f"Characters/{self.name}.txt"]
         ).load_data()
+        
         embed_model = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        
         service_context = ServiceContext.from_defaults(embed_model=embed_model, llm=self.llm)
         index = VectorStoreIndex.from_documents(documents, service_context=service_context)
         query_engine = index.as_query_engine()

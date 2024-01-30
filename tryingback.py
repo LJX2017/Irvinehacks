@@ -34,7 +34,8 @@ async def receive_config(config_prompts: Config):
     """Listens for POST request on http://127.0.0.1:8000/backend from front-end, then creates a character and returns a placeholder JSON"""
     global character
     character = Character(config_prompts.description)
-    return {"message": response}
+    return {"message": "response"}
+
 
 @app.post("/sendMessage")
 async def receive_text_json(msg_prompt: Message):
