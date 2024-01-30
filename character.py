@@ -1,6 +1,8 @@
 import llama_index
 from llama_index.llms import Gemini
 from dotenv import load_dotenv
+from llama_index.vector_stores import ChromaVectorStore
+from llama_index.storage.storage_context import StorageContext
 import llama_hub
 from llama_index import download_loader
 import json
@@ -15,13 +17,14 @@ from llama_index import (
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from llama_index.tools import QueryEngineTool, ToolMetadata
 from llama_index.agent import ReActAgent
-
+from llama_index.tools.tool_spec.load_and_search.base import LoadAndSearchToolSpec
+from llama_hub.tools.wikipedia import WikipediaToolSpec
 load_dotenv()
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 WikipediaReader = download_loader("WikipediaReader")
 loader = WikipediaReader()
-
-
+wiki_spec = WikipediaToolSpec()
+tool = wiki_spec.to_tool_list()[1]
 class Character:
     def __init__(self, user_prompt):
         # create character based on user prompt
@@ -57,13 +60,14 @@ class Character:
 
     def generate_description_from_user(self, user_prompt):
         # self.information = llama_index.get_character_info(user)
-        prompt = f"Based on the description, ***{user_prompt}***, does this description uniquely match a known character from games, novels, movies, or other media? Answer 'yes' if you are certain the description matches a known character. Otherwise, answer 'no'."
+        prompt = f"Based on the description, ***{user_prompt}***, does this description uniquely match a known character from games, novels, movies, or other media? Only Answer 'yes' if you are certain the description matches a unique known character. Otherwise, answer 'no'."
         is_original_character = self.llm.complete(prompt).text
         print("check original character", is_original_character)
         if is_original_character == "yes":
             is_original_character = False
         else:
             is_original_character = True
+        self.original_character = is_original_character
         if is_original_character:
             name_prompt = (f"Based on the user's prompt: {user_prompt}, generate a suitable name for the character."
                            f"Only provide one answer The name of the character is:")
@@ -72,6 +76,9 @@ class Character:
                            f"figure out who the character is."
                            f"Only provide one answer. The name of the character in the prompt is:")
         self.name = self.llm.complete(name_prompt).text
+        print("check name", self.name)
+        if not Path(f'Characters').exists():
+            Path(f'Characters').mkdir()
         if Path(f'Characters/{self.name}.json').exists():
             with open(f'Characters/{self.name}.json', 'r') as f:
                 data = json.load(f)
@@ -106,8 +113,14 @@ class Character:
             # background_prompt = (f"Give me a full description of {self.name}'s background, do not spare any
             # details" "provide a rigorous description of at least 500 words. The character's background is:")
             # self.personal_background = self.llm.complete(background_prompt).text
+            print("check wiki search", [self.name])
 
+
+
+
+            #TODO fix wiki loader error
             documents = loader.load_data(pages=[self.name])
+            print("found wiki", documents)
             self.personal_background = documents[0].text
             self.language_style = self.llm.complete(f"describe {self.name}'s language style in concise terms."
                                                     "The character's style is:").text
@@ -142,9 +155,14 @@ class Character:
                 )
             )
         ]
+        # if not self.original_character:
+        #     query_engine_tools = query_engine_tools + (
+        #         LoadAndSearchToolSpec.from_defaults(tool).to_tool_list()
+        #     )
         context = (f"You are role-playing as {self.name}."
                    f"Your personality is {self.personality}."
-                   f"You should speak in the style of {self.language_style}.")
+                   f"You should speak in the style of {self.language_style}."
+                   f"Always speak in first person, and refer to yourself as {self.name}.")
         return ReActAgent.from_tools(query_engine_tools, llm=self.llm, verbose=True, context=context)
 
 

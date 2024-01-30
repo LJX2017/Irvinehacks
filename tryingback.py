@@ -29,7 +29,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-character = None
 @app.post("/backend")
 async def receive_frontend(item: Item):
     global character
