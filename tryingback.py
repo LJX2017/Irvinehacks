@@ -1,13 +1,9 @@
 # main.py (FastAPI)
-import random
-from fastapi import FastAPI
+import io, json, whisper
+from fastapi import FastAPI, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from fastapi import HTTPException, Form
 from character import Character
-import io
-import json
-import whisper
 # this is the open-ai whisper model
 # pip install openai-whisper 
 # sudo apt-get install ffmpeg
