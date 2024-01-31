@@ -1,25 +1,21 @@
-from llama_index.llms import Gemini
-from dotenv import load_dotenv
-from llama_index import download_loader
 import json
-from llama_index import ServiceContext
 from pathlib import Path
-from llama_index import (
-    SimpleDirectoryReader,
-    VectorStoreIndex,
-)
-# pip install langchain
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from dotenv import load_dotenv
+from llama_index.llms import Gemini
+from llama_index import download_loader, ServiceContext, SimpleDirectoryReader, VectorStoreIndex
 from llama_index.tools import QueryEngineTool, ToolMetadata
 from llama_index.agent import ReActAgent
-
 from llama_hub.tools.wikipedia import WikipediaToolSpec
+# pip install langchain
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+
 load_dotenv()
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 WikipediaReader = download_loader("WikipediaReader")
 loader = WikipediaReader()
 wiki_spec = WikipediaToolSpec()
 tool = wiki_spec.to_tool_list()[1]
+
 class Character:
     def __init__(self, user_prompt):
         # create character based on user prompt
@@ -50,10 +46,12 @@ class Character:
         self.generate_description_from_user(user_prompt)
         self.agent = self.create_agent(user_prompt)
 
-    def chat(self, user_prompt):
+    def chat(self, user_prompt: str) -> str:
+        """Gives the character a prompt and returns the response"""
         return str(self.agent.chat(user_prompt))
 
-    def generate_description_from_user(self, user_prompt):
+    def generate_description_from_user(self, user_prompt: str) -> None:
+        """Generates a character description based on the user's prompt, and creates a file storing that information"""
         # self.information = llama_index.get_character_info(user)
         prompt = f"Based on the description, ***{user_prompt}***, does this description uniquely match a known character from games, novels, movies, or other media? Only Answer 'yes' if you are certain the description matches a unique known character. Otherwise, answer 'no'."
         is_original_character = self.llm.complete(prompt).text
@@ -128,7 +126,8 @@ class Character:
                        "personal_background": self.personal_background,
                        "language_style": self.language_style}, f)
 
-    def create_agent(self, user_prompt):
+    def create_agent(self, user_prompt: str):
+        """Creates an agent representing the character, and returns it"""
         # character = character.Character()
         # self.generate_description_from_user(input("Enter a prompt for the character: "))
         documents = SimpleDirectoryReader(
